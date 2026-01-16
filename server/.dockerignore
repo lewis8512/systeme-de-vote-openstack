@@ -1,0 +1,36 @@
+# Dependencies
+node_modules
+
+# Build output (will be regenerated)
+dist
+
+# Cache files
+.tsbuildinfo
+tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+# Environment files (secrets)
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Tests
+test
+coverage
+*.spec.ts
+
+# Docker (avoid recursive copy)
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Documentation
+*.md

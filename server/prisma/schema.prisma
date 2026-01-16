@@ -1,0 +1,106 @@
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/////////////////////////////////////////////////////
+// 🔐 Admins : gestionnaires du système de vote
+/////////////////////////////////////////////////////
+
+model Admin {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String   // Hashed password (argon2)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/////////////////////////////////////////////////////
+// 👤 Électeurs : utilisateurs autorisés à voter
+/////////////////////////////////////////////////////
+
+model Elector {
+  id        Int      @id @default(autoincrement())
+  name      String
+  surname   String
+  birthDate DateTime
+  birthPlace String
+  idCardNumber String   @unique
+  password  String   // Hashed password
+  email     String @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  votes     Vote[]
+}
+
+/////////////////////////////////////////////////////
+// 🗳️ Élections
+/////////////////////////////////////////////////////
+
+model Election {
+  id         Int        @id @default(autoincrement())
+  title      String
+  startDate  DateTime
+  endDate    DateTime
+
+  candidates Candidate[]
+  votes      Vote[]
+  receipts   Receipt[]
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+}
+
+/////////////////////////////////////////////////////
+// 🧑‍🤝‍🧑 Candidats (liés à une élection)
+/////////////////////////////////////////////////////
+
+model Candidate {
+  id          Int       @id @default(autoincrement())
+  name        String
+  surname     String
+  party       String
+  image       Bytes?
+
+  electionId  Int
+  election    Election  @relation(fields: [electionId], references: [id], onDelete: Cascade)
+
+  receipts    Receipt[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/////////////////////////////////////////////////////
+// 🔐 Vote
+/////////////////////////////////////////////////////
+
+model Vote {
+  id          Int      @id @default(autoincrement())
+  electorId   Int
+  elector     Elector  @relation(fields: [electorId], references: [id])
+  electionId  Int
+  election    Election @relation(fields: [electionId], references: [id])
+  createdAt   DateTime @default(now())
+  @@unique([electorId, electionId]) // un seul vote par électeur et élection
+}
+
+/////////////////////////////////////////////////////
+// 🔐 Récipissé de vote
+/////////////////////////////////////////////////////
+
+model Receipt {
+  voteHash    String   @id
+  candidateId Int
+  electionId  Int
+  candidate   Candidate @relation(fields: [candidateId], references: [id])
+  election    Election  @relation(fields: [electionId], references: [id])
+}
+

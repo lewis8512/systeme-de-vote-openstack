@@ -1,0 +1,26 @@
+# Dependencies
+node_modules
+
+# Build output (will be regenerated)
+dist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE
+.vscode
+.idea
+
+# Git
+.git
+.gitignore
+
+# Docker
+Dockerfile
+Dockerfile.dev
+.dockerignore
+
+# Documentation
+*.md
