@@ -1,5 +1,4 @@
 FROM node:20-alpine AS builder
-RUN apk add --no-cache python3 make g++ openssl
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
@@ -9,7 +8,6 @@ RUN yarn build
 RUN test -f dist/main.js || (echo "ERREUR: dist/main.js non genere" && exit 1)
 
 FROM node:20-alpine AS production
-RUN apk add --no-cache openssl
 WORKDIR /app
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
