@@ -8,7 +8,7 @@ import { ArrowLeft, LogOut } from "lucide-react";
 import { config } from "../config";
 import { handleLogout } from "../utils/authUtils";
 
-const socket = io(`${config.socketUrl}`, {
+const socket = io("/", {
     withCredentials: true,
   });
 

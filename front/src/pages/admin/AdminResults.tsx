@@ -10,7 +10,7 @@ import { handleAdminLogout } from "../../utils/authUtils";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const socket = io(`${config.socketUrl}/admin-results`, { withCredentials: true }); // Utiliser le namespace admin-results
+const socket = io("/admin-results", { withCredentials: true }); // Utiliser le namespace admin-results
 
 export default function AdminResults() {
   const navigate = useNavigate();
